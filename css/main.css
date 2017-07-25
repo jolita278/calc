@@ -1,0 +1,22 @@
+.container{
+    max-width: 100%;
+    display: block;
+    background-color: antiquewhite;
+    border-radius: 25px;
+    margin: auto;
+    width: 50%;
+    padding:50px 20px;
+}
+
+.btn-responsive{
+    white-space: normal !important;
+    word-wrap: break-word;
+    min-width: 25%;
+    min-height: 100px;
+    font-weight: bold;
+
+}
+.form-control{
+    text-align: right;
+
+}
