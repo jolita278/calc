@@ -18,5 +18,5 @@ var buttons_data =  [
     {"type": "action", "value":"+-", "class":"btn btn-primary btn-responsive"},
     {"type": "number", "value":"0", "class":"btn btn-default btn-responsive"},
     {"type": "number", "value":".", "class":"btn btn-default btn-responsive"},
-    {"type": "action", "value":"=", "class":"btn btn-primary btn-responsive"}
+    {"type": "result", "value":"=", "class":"btn btn-success btn-responsive"}
 ];
