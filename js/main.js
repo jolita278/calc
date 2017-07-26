@@ -52,8 +52,18 @@ $(document).ready(function () {
         var res_value = $(this).val();
         $(".btn-success").attr("disabled", "disabled");// disable button "=" after click
         $('#input').val(res_value);
-        var result = first +" " + action_value +" " + second + " " + res_value
-        $(".container").append(result);
+
+        calculate(first,second,action_value); //calculate result
+
+        var show_result = first +" " + action_value +" " + second + " " + res_value; //show calculation
+        $(".container").prepend(show_result);
     });
 });
 
+function calculate(a,b,c){
+if (c==="+")
+    var end = parseFloat(a) + parseFloat(b);
+
+    $('#input').val(end);
+//TODO:switch cases
+}
