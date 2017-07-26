@@ -19,13 +19,15 @@ $(document).ready(function () {
 
 });
 
-
-function handle_click(e) {
+var res = '';
+function handle_click() {
     $(document).ready(function () {
-        $('.btn-default').click(function () {
-          //  alert(e.currentTarget === this);
-             $('#input').val($(this).val());
-        });
+        $(".btn-default").click(function () {
+            var value = $(this).val();
+             $('#input').val(res+= value);
+            //$('#input').attr('value', $(this).val());
 
+
+        });
     });
 }
