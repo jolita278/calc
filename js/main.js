@@ -90,21 +90,64 @@ function handleClick(e) {
                     first += $b.val();
                 break;
             case '0':
-                if (first.length === 1 && first === "0"){}
+                if (first.length === 1 && first === "0") {
+                }
                 else
-                first += $b.val();
+                    first += $b.val();
                 break;
             default:
-                if(first.length === 1 && first === "0")
+                if (first.length === 1 && first === "0")
                     first = $b.val();
                 else
-                first += $b.val();
+                    first += $b.val();
         }
 
         $('#input').val(first);
     }
     else {
-        console.log("veiksmas");
+        switch ($b.val()) {
+            case 'C':
+                first = '0';
+                $('#input').val(first);
+                break;
+            case '<|':
+                if (first.length <= 1) {
+                    first = '0';
+                }
+                else
+                    first = first.slice(0, -1);
+                $('#input').val(first);
+                break;
+            case '%':
+
+                break;
+            case '/':
+
+                break;
+            case '*':
+
+                break;
+            case '+':
+
+                break;
+            case '-':
+
+                break;
+            case '+-':
+                if (first[0] === "-")
+                    first = first.substring(1, first.length);
+                else if (first !== "0")
+                    first = "-" + first;
+
+                $('#input').val(first);
+                break;
+            case '0':
+
+                break;
+
+            default:
+
+        }
     }
 
 }
