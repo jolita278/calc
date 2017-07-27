@@ -1,6 +1,6 @@
 var buttons_data =  [
-    {"type": "clear", "value":"C", "class":"btn btn-info clear "},
-    {"type": "clear", "value":"<|", "class":"btn btn-info clear "},
+    {"type": "action", "value":"C", "class":"btn btn-info clear "},
+    {"type": "action", "value":"<|", "class":"btn btn-info clear "},
     {"type": "action", "value":"%", "class":"btn btn-primary action "},
     {"type": "action", "value":"/", "class":"btn btn-primary action "},
     {"type": "number", "value":"1", "class":"btn btn-default number "},
@@ -15,8 +15,8 @@ var buttons_data =  [
     {"type": "number", "value":"8", "class":"btn btn-default number "},
     {"type": "number", "value":"9", "class":"btn btn-default number "},
     {"type": "action", "value":"-", "class":"btn btn-primary action "},
-    {"type": "pos_neg", "value":"+-", "class":"btn btn-default pos_neg "},
+    {"type": "action", "value":"+-", "class":"btn btn-default pos_neg "},
     {"type": "number", "value":"0", "class":"btn btn-default number "},
     {"type": "number", "value":".", "class":"btn btn-default number "},
-    {"type": "result", "value":"=", "class":"btn btn-success result "}
+    {"type": "action", "value":"=", "class":"btn btn-success result "}
 ];
