@@ -22,7 +22,80 @@ $(document).ready(function () {
 
 var first = '0';
 var second = '';
-var action_value;
+var action;
+
+
+$(document).ready(function () {
+    $(".btn").click(handleClick);
+});
+
+function handleClick(e) {
+    var $b = $(e.currentTarget);
+
+    if ($b.attr('type') === "number") {
+
+        switch ($b.val()) {
+            case '.':
+                if (first.indexOf(".") === -1)
+                    first += $b.val();
+                break;
+            case '0':
+                if (first.length === 1 && first === "0") {
+                }
+                else
+                    first += $b.val();
+                break;
+            default:
+                if (first.length === 1 && first === "0")
+                    first = $b.val();
+                else
+                    first += $b.val();
+                console.log(action);
+        }
+
+        $('#input').val(first);
+    }
+    else {
+        switch ($b.val()) {
+            case 'C':
+                first = '0';
+                $('#input').val(first);
+                $(".allow_disable").attr("disabled", false);
+
+                break;
+            case '<|':
+                if (first.length <= 1) {
+                    first = '0';
+                }
+                else
+                    first = first.slice(0, -1);
+                $('#input').val(first);
+                break;
+            case '+-':
+                if (first[0] === "-")
+                    first = first.substring(1, first.length);
+                else if (first !== "0")
+                    first = "-" + first;
+
+                $('#input').val(first);
+                break;
+
+            case '%':
+            case '/':
+            case '*':
+            case '+':
+            case '-':
+                action = $b.val();
+                first += ' '+ action + ' ';
+                $(".allow_disable").attr("disabled", true);
+
+                break;
+            default:
+        }
+    }
+
+}
+
 
 // $(document).ready(function () {
 //     $(".number").click(function (e) {
@@ -74,83 +147,6 @@ var action_value;
 //         $('#input').val(sliced);
 //     });
 // });
-
-$(document).ready(function () {
-    $(".btn").click(handleClick);
-});
-
-function handleClick(e) {
-    var $b = $(e.currentTarget);
-
-    if ($b.attr('type') === "number") {
-
-        switch ($b.val()) {
-            case '.':
-                if (first.indexOf(".") === -1)
-                    first += $b.val();
-                break;
-            case '0':
-                if (first.length === 1 && first === "0") {
-                }
-                else
-                    first += $b.val();
-                break;
-            default:
-                if (first.length === 1 && first === "0")
-                    first = $b.val();
-                else
-                    first += $b.val();
-        }
-
-        $('#input').val(first);
-    }
-    else {
-        switch ($b.val()) {
-            case 'C':
-                first = '0';
-                $('#input').val(first);
-                break;
-            case '<|':
-                if (first.length <= 1) {
-                    first = '0';
-                }
-                else
-                    first = first.slice(0, -1);
-                $('#input').val(first);
-                break;
-            case '%':
-
-                break;
-            case '/':
-
-                break;
-            case '*':
-
-                break;
-            case '+':
-
-                break;
-            case '-':
-
-                break;
-            case '+-':
-                if (first[0] === "-")
-                    first = first.substring(1, first.length);
-                else if (first !== "0")
-                    first = "-" + first;
-
-                $('#input').val(first);
-                break;
-            case '0':
-
-                break;
-
-            default:
-
-        }
-    }
-
-}
 
 //
 // var end;
