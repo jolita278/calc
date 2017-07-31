@@ -1,16 +1,13 @@
-var first = '0',
-    second = '',
-    action,
+var action,
     numbers = ['0'],
     actions = [];
 
-const ACTION_REPLACE = "replace",
-    ACTION_DELETE_LAST = "delete_last",
+const ACTION_DELETE_LAST = "delete_last",
     ACTION_INCREASE = "increase",
     ACTION_REVERSE = "reverse",
     ACTION_CLEAR = "clear",
-    ACTION_CALCULATE = "calculate";
-
+    ACTION_CALCULATE = "calculate",
+    ACTION_CALCULATE_PERCENTAGE = 'calculate_persentage';
 
 $("<div/>").attr('class', 'container').attr('text', '0').appendTo('body');
 $("<div/>").attr('class', 'form-group').appendTo('.container');
@@ -26,11 +23,12 @@ $(document).ready(function () {
     var divrow = $("<div/>").appendTo('.container');
 
     $.each(buttons_data, function (index, buttons_data) {
-        divrow.append($("<button>" + buttons_data.value + '</button>')
-            .attr("type", buttons_data.type)
-            .attr("value", buttons_data.value)
-            .attr("disabled", false)
-            .attr("class", buttons_data.class));
+        divrow.append($("<button>" + buttons_data.value + '</button>').attr({
+            type: buttons_data.type,
+            value: buttons_data.value,
+            disabled: false,
+            class: buttons_data.class
+        }))
     });
 });
 
@@ -38,49 +36,46 @@ $(document).ready(function () {
     $(".btn").click(handleClick);
 });
 
+/*
+Function, which sorts buttons clicks, and calls function updateNumber(action, value)
+ */
 function handleClick(e) {
-    var $b = $(e.currentTarget);
+    var $b = $(e.currentTarget)
 
     if ($b.attr('type') === "number") {
 
         updateNumber(ACTION_INCREASE, $b.val())
-        update_input();
     }
     else {
+        if (numbers[actions.length].slice(-1) === ".")
+            numbers[actions.length] = numbers[actions.length].slice(0, -1);
+
         switch ($b.val()) {
+
             case 'C':
                 updateNumber(ACTION_CLEAR);
-                // first = '0';
-                // $('#input').val(first);
-                // $(".allow_disable").attr("disabled", false);
 
                 break;
             case '<|':
                 updateNumber(ACTION_DELETE_LAST);
-            // if (first.length <= 1) {
-            //     first = '0';
-            // }
-            // else
-            //  first = first.slice(0, -1);
-            //
-            //  $('#input').val(first);
-            // break;
+                break;
+
             case '+-':
                 updateNumber(ACTION_REVERSE);
-                // if (first[0] === "-")
-                //     first = first.substring(1, first.length);
-                // else if (first !== "0")
-                //     first = "-" + first;
-                // $('#input').val(first);
                 break;
+
             case '=':
                 updateNumber(ACTION_CALCULATE);
+                break;
+            case"%":
+                updateNumber(ACTION_CALCULATE_PERCENTAGE);
+                break;
 
-            case '%':
             case '/':
             case '*':
             case '+':
             case '-':
+
                 if (numbers[numbers.length - 1] !== '0') {
                     actions.push($b.val());
                     numbers[actions.length] = '0';
@@ -92,18 +87,30 @@ function handleClick(e) {
                 break;
             default:
         }
-
     }
-
+    update_input();
+    console.log(numbers);
+    console.log(actions);
 }
+/*
+function, which updates the number depending on cases
+*/
 
 function updateNumber(action, value) {
-    //console.log(action, value);
     switch (action) {
-        case ACTION_REPLACE:
 
-            break;
         case ACTION_DELETE_LAST:
+
+            if (numbers[actions.length] === '0') {
+                numbers.pop();
+                actions.pop();
+            }
+            else {
+                var s = numbers[actions.length].slice(0, -1);
+                if (s.length === 0)
+                    s = "0";
+                numbers[actions.length] = s;
+            }
 
             break;
         case ACTION_INCREASE:
@@ -129,148 +136,107 @@ function updateNumber(action, value) {
             }
 
             numbers[actions.length] = n;
-
             break;
+
         case ACTION_REVERSE:
+            var n = numbers[actions.length];
 
+            if (n[0] === "-") {
+                n = n.substring(1, n.length)
+            }
+            else if (n !== "0")
+                n = "-" + n;
+            numbers[actions.length] = n;
             break;
+
         case ACTION_CLEAR:
-
+            numbers = ['0'];
+            actions = [];
             break;
-        case ACTION_CALCULATE:
-           var a = parseFloat(numbers[0]);
 
-            for(var i=1; i<numbers.length; i++){
+        case ACTION_CALCULATE:
+
+            var a = parseFloat(numbers[0]);
+
+            for (var i = 1; i < numbers.length; i++) {
 
                 var b = parseFloat(numbers[i]);
-                  switch(actions[i-1]){
-                      case '+':
-                          a += b;
-                          break;
-                      case '-':
-                          a -= b;
-                          break;
-                      case '/':
-                          a /= b;
-                          break;
-                      case '*':
-                          a *= b;
-                          break;
-                      default:
-                          //console.log("unknown action");
-                  }
-
+                switch (actions[i - 1]) {
+                    case '+':
+                        a += b;
+                        break;
+                    case '-':
+                        a -= b;
+                        break;
+                    case '/':
+                        a /= b;
+                        break;
+                    case '*':
+                        a *= b;
+                        break;
+                    case'%':
+                        b = a / 100 * b;
+                        a = a - b;
+                        break;
+                    default:
+                        console.log("unknown action");
+                }
             }
-            console.log(a);
-            $('#input').val(a);
+            numbers = [a.toString()];
+            actions = [];
             break;
+
+        case ACTION_CALCULATE_PERCENTAGE:
+
+            if (actions.length === 0)
+                numbers[0] = '0';
+            else {
+
+                var a = parseFloat(numbers[0]);
+
+                for (var i = 1; i < actions.length; i++) {
+
+                    var b = parseFloat(numbers[i]);
+                    switch (actions[i - 1]) {
+                        case '+':
+                            a += b;
+                            break;
+                        case '-':
+                            a -= b;
+                            break;
+                        case '/':
+                            a /= b;
+                            break;
+                        case '*':
+                            a *= b;
+                            break;
+                        default:
+                            console.log("unknown action");
+                    }
+                }
+                numbers[actions.length] = (numbers[actions.length] * (a / 100)).toString();
+            }
+            break;
+
         default:
             console.log("unknown action");
-
     }
-
 }
-
+/*
+ function, which updates the input field
+ */
 function update_input() {
     var s = "";
-    for (var i = 0; i < numbers.length; i++) {
-        if (numbers[i] !== "0")
-            s += numbers[i];
-        if (actions[i])
-            s += actions[i];
+    if (numbers.length === 1)
+        s = numbers[0];
+    else {
+        for (var i = 0; i < numbers.length; i++) {
+            if (numbers[i] !== "0")
+                s += numbers[i];
+            if (actions[i])
+                s += actions[i];
+        }
     }
     $('#input').val(s);
 }
 
-
-// $(document).ready(function () {
-//     $(".number").click(function (e) {
-//
-//         var value = $(this).val();
-//         if (value === ".")
-//             $(this).attr("disabled", true); //disable dot after first press
-//         if ($(".action").attr("disabled") !== "disabled")
-//             $('#input').val(first += (value)); //shows first pressed buttons values(more than one number inline)
-//         else
-//             $(this).attr("disabled", false);
-//             $('#input').val(second += (value));
-//     });
-// });
-//
-//
-// $(document).ready(function () {
-//     $(".action").click(function () {
-//         action_value = $(this).val();
-//         $(".action").attr("disabled", true); //disable all fuctional buttons after one of  them click
-//         $('#input').val(action_value);
-//     });
-// });
-//
-// $(document).ready(function () {
-//     $(".result").click(function () {
-//         var res_value = $(this).val();
-//         $(".result").attr("disabled", true);// disable button "=" after click
-//         $('#input').val(res_value);
-//
-//         calculate(first, second, action_value); //calculate result
-//
-//         var show_result = first + " " + action_value + " " + second + " " + res_value; //show calculation
-//         $(".container").prepend(show_result);
-//     });
-// });
-//
-//
-// $(document).ready(function () {
-//     $(".clear").click(function () {
-//         var clear_value = $(this).val();
-//         if (clear_value === "C")
-//             reset();
-//         if ($('#input').val().length <= 1)
-//             var sliced = "0";
-//         else
-//             sliced = $('#input').val().slice(0, -1);
-//
-//         $('#input').val(sliced);
-//     });
-// });
-
-//
-// var end;
-// function calculate(a, b, c) {
-//
-//     a = parseFloat(a);
-//     b = parseFloat(b);
-//
-//     switch (c) {
-//         case '+':
-//             end = a + b;
-//             break;
-//         case '-':
-//             end = a - b;
-//             break;
-//         case '*':
-//             end = a * b;
-//             break;
-//         case '/':
-//             end = a / b;
-//             break;
-//         case '%':
-//             end = ""; //TODO: percentage calculation
-//             break;
-//     }
-//     $('#input').val(end);
-// }
-//
-// function reset() {
-//     $(document).ready(function () {
-//         $('#input').val("0");
-//         first = '';
-//         second = '';
-//         action_value = "";
-//         $(".action").attr("disabled", false);
-//         $(".result").attr("disabled", false);
-//         $(".pos_neg").attr("disabled", false);
-//         $(".number").attr("disabled", false);
-//         //TODO clear text on container
-//     });
-// }
